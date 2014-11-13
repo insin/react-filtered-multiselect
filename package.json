@@ -3,7 +3,7 @@
   "description": "Filtered multi-select React component",
   "version": "0.1.0",
   "author": "Jonny Buchanan <jonathan.buchanan@gmail.com> (https://github.com/insin)",
-  "tags": [
+  "keywords": [
     "react",
     "react-component",
     "filtered",
