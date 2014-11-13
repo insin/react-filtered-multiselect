@@ -29,29 +29,6 @@ To deselect items, remove them from the list passed back via the `onChange`
 callback and re-render the `FilteredMultiSelect` with the new list passed as its
 `selectedOptions` prop.
 
-### Required props
-
-Minimal usage:
-
-```javascript
-var options = [
-  {value: 1, text: 'Item One'}
-, {value: 2, text: 'Item Two'}
-]
-
-<FilteredMultiSelect
-  onChange={this.onChange}
-  options={options}
-/>
-```
-
-`options` - list of objects providing `<option>` data for the multi-select. By
-default, these should have ``text`` and ``value`` properties, but this is
-configurable via props.
-
-`onChange(selectedOptions)` - callback which will be called with selected option
-objects each time the selection is added to.
-
 ### Install
 
 **Node**
@@ -76,6 +53,29 @@ find a global ``React`` variable to work with.
 *v0.1.0*
 * [react-filtered-multiselect.js](https://github.com/insin/react-filtered-multiselect/raw/master/dist/react-filtered-multiselect.js) (development version)
 * [react-filtered-multiselect.min.js](https://github.com/insin/react-filtered-multiselect/raw/master/dist/react-filtered-multiselect.min.js) (compressed production version)
+
+### Required props
+
+Minimal usage:
+
+```javascript
+var options = [
+  {value: 1, text: 'Item One'}
+, {value: 2, text: 'Item Two'}
+]
+
+<FilteredMultiSelect
+  onChange={this.onChange}
+  options={options}
+/>
+```
+
+`options` - list of objects providing `<option>` data for the multi-select. By
+default, these should have ``text`` and ``value`` properties, but this is
+configurable via props.
+
+`onChange(selectedOptions)` - callback which will be called with selected option
+objects each time the selection is added to.
 
 ### Optional props
 
