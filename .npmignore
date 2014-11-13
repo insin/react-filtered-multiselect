@@ -1,4 +1,8 @@
 dist
+node_modules
+test
+.gitignore
 .jshintrc
 .npmignore
+bootstrap-example.png
 gulpfile.js

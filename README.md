@@ -52,6 +52,31 @@ configurable via props.
 `onChange(selectedOptions)` - callback which will be called with selected option
 objects each time the selection is added to.
 
+### Install
+
+**Node**
+
+react-filtered-multiselect can be used on the server, or bundled for the client
+using an npm-compatible packaging system such as [Browserify](http://browserify.org/)
+or [webpack](http://webpack.github.io/).
+
+````
+npm install react-filtered-multiselect
+```
+
+```javascript
+var FilteredMultiSelect = require('react-filtered-multiselect')
+```
+
+**Browser**
+
+Browser bundles export a global ``FilteredMultiSelect`` variable and expect to
+find a global ``React`` variable to work with.
+
+*v0.1.0*
+* [react-filtered-multiselect.js](https://github.com/insin/react-filtered-multiselect/raw/master/dist/react-filtered-multiselect.js) (development version)
+* [react-filtered-multiselect.min.js](https://github.com/insin/react-filtered-multiselect/raw/master/dist/react-filtered-multiselect.min.js) (compressed production version)
+
 ### Optional props
 
 `buttonText` - text to be displayed in the `<button>` for adding selected `<option>`s.
