@@ -7,7 +7,7 @@ using a filtered multi-select.
 
 ![FilteredMultiSelect with Bootstrap styles screenshot](https://github.com/insin/react-filtered-multiselect/raw/master/bootstrap-example.png "A FilteredMultiSelect with Bootstrap styles applied")
 
-### About
+### Features
 
 This component manages an `<input>`, a `<select multiple>` and a `<button>`.
 
