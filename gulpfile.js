@@ -18,7 +18,9 @@ var srcHeader = '/**\n\
 
 gulp.task('transpile-jsx', function() {
   return gulp.src('./index.jsx')
-    .pipe(react())
+    .pipe(react({
+      harmony: true
+    }))
     .pipe(gulp.dest('./'))
 })
 
