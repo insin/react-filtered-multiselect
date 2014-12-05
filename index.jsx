@@ -82,8 +82,18 @@ var FilteredMultiSelect = React.createClass({
   componentWillReceiveProps: function(nextProps) {
     if (nextProps.selectedOptions.length != this.state.selectedOptions.length) {
       this.setState({
-        filteredOptions: this.filterOptions(this.state.filter, nextProps.selectedOptions)
+        filteredOptions: this.filterOptions(this.state.filter,
+                                            nextProps.selectedOptions,
+                                            nextProps.options)
       , selectedOptions: nextProps.selectedOptions.slice()
+      })
+    }
+    else if (nextProps.options !== this.props.options ||
+             nextProps.options.length != this.props.options.length) {
+      this.setState({
+        filteredOptions: this.filterOptions(this.state.filter,
+                                            nextProps.selectedOptions,
+                                            nextProps.options)
       })
     }
   },

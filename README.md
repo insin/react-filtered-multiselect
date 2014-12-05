@@ -74,6 +74,12 @@ var options = [
 default, these should have ``text`` and ``value`` properties, but this is
 configurable via props.
 
+The component will update its display if its `options` list changes length or
+is replaced with a different list, but it will *not* be able to detect changes
+which don't affect length or object equality, such as replacement of one option
+with another. Consider using `React.addons.update()` or other immutability
+helpers if you need to do this.
+
 `onChange(selectedOptions)` - callback which will be called with selected option
 objects each time the selection is added to.
 
