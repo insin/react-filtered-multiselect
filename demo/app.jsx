@@ -262,53 +262,52 @@ var bootstrapClasses = {
 var BasicSelection = React.createClass({
   getInitialState() {
     return {
-      selectedShips: []
+      selectedOptions: []
     }
   },
 
-  onMultiSelectChanged(selectedShips) {
-    selectedShips = selectedShips.slice()
-    selectedShips.sort((a, b) => a.id - b.id)
-    this.setState({selectedShips: selectedShips})
+  _onSelectionChange(selectedOptions) {
+    selectedOptions.sort((a, b) => a.id - b.id)
+    this.setState({selectedOptions})
   },
 
-  deselectShip(index) {
-    var selectedShips = this.state.selectedShips.slice()
-    selectedShips.splice(index, 1)
-    this.setState({selectedShips: selectedShips})
+  _onDeselect(index) {
+    var selectedOptions = this.state.selectedOptions.slice()
+    selectedOptions.splice(index, 1)
+    this.setState({selectedOptions})
   },
 
-  clearSelection() {
-    this.setState({selectedShips: []})
+  _onClearSelection() {
+    this.setState({selectedOptions: []})
   },
 
   render() {
-    var {selectedShips} = this.state
+    var {selectedOptions} = this.state
     return <div className="row">
       <div className="col-md-5">
         <FilteredMultiSelect
           classNames={bootstrapClasses}
-          onChange={this.onMultiSelectChanged}
+          onChange={this._onSelectionChange}
           options={CULTURE_SHIPS}
-          selectedOptions={selectedShips}
+          selectedOptions={selectedOptions}
           textProp="name"
           valueProp="id"
         />
         <p className="help-block">Press Enter when there's only one matching item to select it.</p>
       </div>
       <div className="col-md-5">
-        {selectedShips.length === 0 && <p>(nothing selected yet)</p>}
-        {selectedShips.length > 0 && <ol>
-          {selectedShips.map((ship, i) => {
-            return <li>
+        {selectedOptions.length === 0 && <p>(nothing selected yet)</p>}
+        {selectedOptions.length > 0 && <ol>
+          {selectedOptions.map((ship, i) => {
+            return <li key={ship.id}>
               {ship.name}{' '}
-              <span style={{cursor: 'pointer'}} onClick={this.deselectShip.bind(null, i)}>
+              <span style={{cursor: 'pointer'}} onClick={this._onDeselect.bind(null, i)}>
                 &times;
               </span>
             </li>
           })}
         </ol>}
-        {selectedShips.length > 0 && <button style={{marginLeft: 20}} className="btn btn-default" onClick={this.clearSelection}>
+        {selectedOptions.length > 0 && <button style={{marginLeft: 20}} className="btn btn-default" onClick={this._onClearSelection}>
           Clear Selection
         </button>}
       </div>
@@ -316,38 +315,46 @@ var BasicSelection = React.createClass({
   }
 })
 
-var MultiMultiSelects = React.createClass({
+var AddRemoveSelection = React.createClass({
   getInitialState() {
     return {
-      selectedShips: []
+      selectedOptions: []
     }
   },
 
-  onLeftMultiSelectChanged(selectedShips) {
-    selectedShips = selectedShips.slice()
-    selectedShips.sort((a, b) => a.id - b.id)
-    this.setState({selectedShips})
+  _onSelect(selectedOptions) {
+    selectedOptions.sort((a, b) => a.id - b.id)
+    this.setState({selectedOptions})
+  },
+
+  _onDeselect(deselectedOptions) {
+    var selectedOptions = this.state.selectedOptions.slice()
+    deselectedOptions.forEach(option => {
+      selectedOptions.splice(selectedOptions.indexOf(option), 1)
+    })
+    this.setState({selectedOptions})
   },
 
   render() {
-    var {selectedShips} = this.state
+    var {selectedOptions} = this.state
     return <div className="row">
       <div className="col-md-5">
         <FilteredMultiSelect
-          buttonText="Move"
+          buttonText="Add"
           classNames={bootstrapClasses}
-          onChange={this.onLeftMultiSelectChanged}
+          onChange={this._onSelect}
           options={CULTURE_SHIPS}
-          selectedOptions={selectedShips}
+          selectedOptions={selectedOptions}
           textProp="name"
           valueProp="id"
         />
       </div>
       <div className="col-md-5">
         <FilteredMultiSelect
+          buttonText="Remove"
           classNames={bootstrapClasses}
-          onChange={function() {}}
-          options={selectedShips}
+          onChange={this._onDeselect}
+          options={selectedOptions}
           textProp="name"
           valueProp="id"
         />
@@ -370,9 +377,9 @@ var App = React.createClass({
       <p>Select some ships from <a href="http://en.wikipedia.org/wiki/The_Culture">The Culture</a>.</p>
       <BasicSelection/>
 
-      <h2>Multiple MultiSelects</h2>
-      <p>Move items from one <code>&lt;FilteredMultiSelect/&gt;</code> to another</p>
-      <MultiMultiSelects/>
+      <h2>Add &amp; Remove</h2>
+      <p>Move items from one <code>&lt;FilteredMultiSelect/&gt;</code> to another and back again.</p>
+      <AddRemoveSelection/>
     </div>
   }
 })
