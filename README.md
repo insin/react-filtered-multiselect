@@ -25,6 +25,10 @@ in the input will select the object backing it.
 When backing objects are selected, the `onChange` callback is executed, passing
 a list of all backing objects selected so far.
 
+To hide already-selected items, pass them back to `FilteredMultiSelect` as its
+`selectedOptions` prop. This can be more convenient than manually removing the
+selected items from the list passed as `options`.
+
 To deselect items, remove them from the list passed back via the `onChange`
 callback and re-render the `FilteredMultiSelect` with the new list passed as its
 `selectedOptions` prop.
@@ -97,7 +101,7 @@ objects each time the selection is added to.
 
 `placeholder` - placeholder text to be displayed in the filter `<input>`.
 
-`selectedOptions` - array of option objects which are selected, so should no
+`selectedOptions` - list of option objects which are selected, so should no
 longer be displayed in the `<select>`.
 
 `size` - `size` attribute for the `<select>`
@@ -147,11 +151,11 @@ var Example = React.createClass({
     return {selectedShips: []}
   },
 
-  onMultiSelectChanged: function(selectedShips) {
-    this.setState({selectedShips: selectedShips.slice()})
+  _onSelectionChange: function(selectedShips) {
+    this.setState({selectedShips: selectedShips)})
   },
 
-  deselectShip: function(index) {
+  _onDeselect: function(index) {
     var selectedShips = this.state.selectedShips.slice()
     selectedShips.splice(index, 1)
     this.setState({selectedShips: selectedShips})
@@ -160,7 +164,7 @@ var Example = React.createClass({
   render: function() {
     return <div>
       <FilteredMultiSelect
-        onChange={this.onMultiSelectChanged}
+        onChange={this._onSelectionChange}
         options={CULTURE_SHIPS}
         selectedOptions={this.state.selectedShips}
         textProp="name"
@@ -169,8 +173,8 @@ var Example = React.createClass({
       {this.state.selectedShips.length === 0 && <p>(nothing selected yet)</p>}
       {this.state.selectedShips.length > 0 && <ul>
         {this.state.selectedShips.map(function(ship, i) {
-          return <li>{ship.name}{' '}
-            <button type="button" onClick={this.deselectShip.bind(null, i)}>
+          return <li key={ship.id}>{ship.name}{' '}
+            <button type="button" onClick={this._onDeselect.bind(null, i)}>
               &times;
             </button>
           </li>

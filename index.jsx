@@ -66,44 +66,39 @@ var FilteredMultiSelect = React.createClass({
   },
 
   getInitialState() {
+    var {defaultFilter, selectedOptions} = this.props
     return {
       // Filter text
-      filter: this.props.defaultFilter
+      filter: defaultFilter
       // Options which haven't been selected and match the filter text
-    , filteredOptions: this.filterOptions(this.props.defaultFilter,
-                                          this.props.selectedOptions)
-      // Options which have been selected by pressing Enter or the Select button
-    , selectedOptions: this.props.selectedOptions.slice()
+    , filteredOptions: this._filterOptions(defaultFilter, selectedOptions)
       // Values of <options> currently selected in the <select>
     , selectedValues: []
     }
   },
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.selectedOptions.length != this.state.selectedOptions.length) {
+    // Update visibile options in response to options or selectedOptions
+    // changing. Also update selected values after the re-render completes, as
+    // one of the previously selected options may have been removed.
+    if (nextProps.options !== this.props.options ||
+        nextProps.selectedOptions !== this.props.selectedOptions ||
+        nextProps.options.length != this.props.options.length ||
+        nextProps.selectedOptions.length != this.props.selectedOptions.length) {
       this.setState({
-        filteredOptions: this.filterOptions(this.state.filter,
-                                            nextProps.selectedOptions,
-                                            nextProps.options)
-      , selectedOptions: nextProps.selectedOptions.slice()
-      })
-    }
-    else if (nextProps.options !== this.props.options ||
-             nextProps.options.length != this.props.options.length) {
-      this.setState({
-        filteredOptions: this.filterOptions(this.state.filter,
-                                            nextProps.selectedOptions,
-                                            nextProps.options)
-      })
+        filteredOptions: this._filterOptions(this.state.filter,
+                                             nextProps.selectedOptions,
+                                             nextProps.options)
+      }, this._updateSelectedValues)
     }
   },
 
-  filterOptions(filter, selectedOptions, options) {
+  _filterOptions(filter, selectedOptions, options) {
     if (typeof filter == 'undefined') {
       filter = this.state.filter
     }
     if (typeof selectedOptions == 'undefined') {
-      selectedOptions = this.state.selectedOptions
+      selectedOptions = this.props.selectedOptions
     }
     if (typeof options == 'undefined') {
       options = this.props.options
@@ -124,48 +119,50 @@ var FilteredMultiSelect = React.createClass({
     return filteredOptions
   },
 
-  onFilterChange(e) {
+  _onFilterChange(e) {
     var filter = e.target.value
-    this.setState({filter, filteredOptions: this.filterOptions(filter)
-    })
+    this.setState({
+      filter
+    , filteredOptions: this._filterOptions(filter)
+    }, this._updateSelectedValues)
   },
 
-  onFilterKeyPress(e) {
+  _onFilterKeyPress(e) {
     if (e.key == 'Enter') {
       e.preventDefault()
       if (this.state.filteredOptions.length == 1) {
         var selectedOption = this.state.filteredOptions[0]
-        var selectedOptions = this.state.selectedOptions.slice().concat([selectedOption])
-        this.setState({
-          filter: ''
-        , filteredOptions: this.filterOptions('', selectedOptions)
-        , selectedOptions
-        }, this.props.onChange.bind(null, selectedOptions))
+        var selectedOptions = this.props.selectedOptions.concat([selectedOption])
+        this.setState({filter: '', selectedValues: []}, () => {
+          this.props.onChange(selectedOptions)
+        })
       }
     }
   },
 
-  onSelectChange(e) {
-    var el = e.target
+  _updateSelectedValues(e) {
+    var el = e ? e.target : this.refs.select.getDOMNode()
     var selectedValues = []
     for (var i = 0, l = el.options.length; i < l; i++) {
       if (el.options[i].selected) {
         selectedValues.push(el.options[i].value)
       }
     }
-    this.setState({selectedValues: selectedValues})
+    // Always update if we were handling an event, otherwise only update if
+    // selectedValues has actually changed.
+    if (e || String(this.state.selectedValues) != String(selectedValues)) {
+      this.setState({selectedValues})
+    }
   },
 
-  selectOptions(e) {
+  _onButtonClick(e) {
     var selectedOptions =
-      this.state.selectedOptions.concat(getItemsByProp(this.state.filteredOptions,
+      this.props.selectedOptions.concat(getItemsByProp(this.state.filteredOptions,
                                                        this.props.valueProp,
                                                        this.state.selectedValues))
-    this.setState({
-      filteredOptions: this.filterOptions(this.state.filter, selectedOptions)
-    , selectedOptions
-    , selectedValues: []
-    }, this.props.onChange.bind(null, selectedOptions))
+    this.setState({selectedValues: []}, () => {
+      this.props.onChange(selectedOptions)
+    })
   },
 
   render() {
@@ -176,15 +173,16 @@ var FilteredMultiSelect = React.createClass({
          className={props.classNames.filter}
          placeholder={props.placeholder}
          value={state.filter}
-         onChange={this.onFilterChange}
-         onKeyPress={this.onFilterKeyPress}
+         onChange={this._onFilterChange}
+         onKeyPress={this._onFilterKeyPress}
          disabled={props.disabled}
       />
       <select multiple
+         ref="select"
          className={props.classNames.select}
          size={props.size}
          value={state.selectedValues}
-         onChange={this.onSelectChange}
+         onChange={this._updateSelectedValues}
          disabled={props.disabled}>
         {this.state.filteredOptions.map((option) => {
           return <option key={option[props.valueProp]} value={option[props.valueProp]}>{option[props.textProp]}</option>
@@ -193,7 +191,7 @@ var FilteredMultiSelect = React.createClass({
       <button type="button"
          className={props.classNames.button}
          disabled={state.selectedValues.length === 0}
-         onClick={this.selectOptions}>
+         onClick={this._onButtonClick}>
         {this.props.buttonText}
       </button>
     </div>
