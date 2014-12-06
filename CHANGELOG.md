@@ -1,11 +1,12 @@
-*Breaking:* If you want selected options to no longer appear in the select, you
-now _must_ either pass them back to `FilteredMultiSelect` via its
-`selectedOptions` prop or manually remove them from the `options` list.
+## 0.2.0 - 2014-12-06
 
-A `FilteredMultiSelect` will now update its display if its `options` list's
-`.length` changes or is no longer `===` the previous `options` list.
+**Breaking:** If you want selected options to no longer appear in the select,
+you now _must_ either pass them back to `FilteredMultiSelect` via its
+`selectedOptions` prop or manually remove them from list that gets passed as its
+ `options` prop.
 
-Now using ES6 transforms when transpiling.
+Fixed: `FilteredMultiSelect` will now re-render if its `options` prop is
+replaced with another object, or `options.length` changes.
 
 Removed React from package.json `dependencies` - it's now only in
 `peerDependencies`.

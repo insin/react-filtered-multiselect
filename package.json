@@ -1,7 +1,7 @@
 {
   "name": "react-filtered-multiselect",
   "description": "Filtered multi-select React component",
-  "version": "0.2.0-alpha",
+  "version": "0.2.0",
   "author": "Jonny Buchanan <jonathan.buchanan@gmail.com> (https://github.com/insin)",
   "keywords": [
     "react",

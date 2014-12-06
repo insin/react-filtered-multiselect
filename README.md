@@ -54,7 +54,7 @@ var FilteredMultiSelect = require('react-filtered-multiselect')
 Browser bundles export a global ``FilteredMultiSelect`` variable and expect to
 find a global ``React`` variable to work with.
 
-*v0.1.0*
+*v0.2.0*
 * [react-filtered-multiselect.js](https://github.com/insin/react-filtered-multiselect/raw/master/dist/react-filtered-multiselect.js) (development version)
 * [react-filtered-multiselect.min.js](https://github.com/insin/react-filtered-multiselect/raw/master/dist/react-filtered-multiselect.min.js) (compressed production version)
 

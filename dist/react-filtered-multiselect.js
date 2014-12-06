@@ -1,5 +1,5 @@
 /**
- * react-filtered-multiselect 0.1.1 - https://github.com/insin/react-filtered-multiselect
+ * react-filtered-multiselect 0.2.0 - https://github.com/insin/react-filtered-multiselect
  * MIT Licensed
  */
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.FilteredMultiSelect=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
@@ -51,7 +51,7 @@ var FilteredMultiSelect = React.createClass({displayName: 'FilteredMultiSelect',
   , valueProp: React.PropTypes.string
   },
 
-  getDefaultProps: function() {
+  getDefaultProps:function() {
     return {
       buttonText: 'Select'
     , className: 'FilteredMultiSelect'
@@ -70,41 +70,47 @@ var FilteredMultiSelect = React.createClass({displayName: 'FilteredMultiSelect',
     }
   },
 
-  getInitialState: function() {
+  getInitialState:function() {
+    var $__0=   this.props,defaultFilter=$__0.defaultFilter,selectedOptions=$__0.selectedOptions
     return {
       // Filter text
-      filter: this.props.defaultFilter
+      filter: defaultFilter
       // Options which haven't been selected and match the filter text
-    , filteredOptions: this.filterOptions(this.props.defaultFilter,
-                                          this.props.selectedOptions)
-      // Options which have been selected by pressing Enter or the Select button
-    , selectedOptions: this.props.selectedOptions.slice()
+    , filteredOptions: this._filterOptions(defaultFilter, selectedOptions)
       // Values of <options> currently selected in the <select>
     , selectedValues: []
     }
   },
 
-  componentWillReceiveProps: function(nextProps) {
-    if (nextProps.selectedOptions.length != this.state.selectedOptions.length) {
+  componentWillReceiveProps:function(nextProps) {
+    // Update visibile options in response to options or selectedOptions
+    // changing. Also update selected values after the re-render completes, as
+    // one of the previously selected options may have been removed.
+    if (nextProps.options !== this.props.options ||
+        nextProps.selectedOptions !== this.props.selectedOptions ||
+        nextProps.options.length != this.props.options.length ||
+        nextProps.selectedOptions.length != this.props.selectedOptions.length) {
       this.setState({
-        filteredOptions: this.filterOptions(this.state.filter, nextProps.selectedOptions)
-      , selectedOptions: nextProps.selectedOptions.slice()
-      })
+        filteredOptions: this._filterOptions(this.state.filter,
+                                             nextProps.selectedOptions,
+                                             nextProps.options)
+      }, this._updateSelectedValues)
     }
   },
 
-  filterOptions: function(filter, selectedOptions) {
+  _filterOptions:function(filter, selectedOptions, options) {
     if (typeof filter == 'undefined') {
       filter = this.state.filter
     }
     if (typeof selectedOptions == 'undefined') {
-      selectedOptions = this.state.selectedOptions
+      selectedOptions = this.props.selectedOptions
+    }
+    if (typeof options == 'undefined') {
+      options = this.props.options
     }
     filter = filter.toUpperCase()
 
-    var options = this.props.options
-    var textProp = this.props.textProp
-    var valueProp = this.props.valueProp
+    var $__0=   this.props,textProp=$__0.textProp,valueProp=$__0.valueProp
     var selectedValueLookup = makeLookup(selectedOptions, valueProp)
     var filteredOptions = []
 
@@ -118,79 +124,79 @@ var FilteredMultiSelect = React.createClass({displayName: 'FilteredMultiSelect',
     return filteredOptions
   },
 
-  onFilterChange: function(e) {
+  _onFilterChange:function(e) {
     var filter = e.target.value
     this.setState({
-      filter: filter
-    , filteredOptions: this.filterOptions(filter)
-    })
+      filter:filter
+    , filteredOptions: this._filterOptions(filter)
+    }, this._updateSelectedValues)
   },
 
-  onFilterKeyPress: function(e) {
+  _onFilterKeyPress:function(e) {
     if (e.key == 'Enter') {
       e.preventDefault()
       if (this.state.filteredOptions.length == 1) {
         var selectedOption = this.state.filteredOptions[0]
-        var selectedOptions = this.state.selectedOptions.slice().concat([selectedOption])
-        this.setState({
-          filter: ''
-        , filteredOptions: this.filterOptions('', selectedOptions)
-        , selectedOptions: selectedOptions
-        }, this.props.onChange.bind(null, selectedOptions))
+        var selectedOptions = this.props.selectedOptions.concat([selectedOption])
+        this.setState({filter: '', selectedValues: []}, function()  {
+          this.props.onChange(selectedOptions)
+        }.bind(this))
       }
     }
   },
 
-  onSelectChange: function(e) {
-    var el = e.target
+  _updateSelectedValues:function(e) {
+    var el = e ? e.target : this.refs.select.getDOMNode()
     var selectedValues = []
     for (var i = 0, l = el.options.length; i < l; i++) {
       if (el.options[i].selected) {
         selectedValues.push(el.options[i].value)
       }
     }
-    this.setState({selectedValues: selectedValues})
+    // Always update if we were handling an event, otherwise only update if
+    // selectedValues has actually changed.
+    if (e || String(this.state.selectedValues) != String(selectedValues)) {
+      this.setState({selectedValues:selectedValues})
+    }
   },
 
-  selectOptions: function(e) {
+  _onButtonClick:function(e) {
     var selectedOptions =
-      this.state.selectedOptions.concat(getItemsByProp(this.state.filteredOptions,
+      this.props.selectedOptions.concat(getItemsByProp(this.state.filteredOptions,
                                                        this.props.valueProp,
                                                        this.state.selectedValues))
-    this.setState({
-      filteredOptions: this.filterOptions(this.state.filter, selectedOptions)
-    , selectedOptions: selectedOptions
-    , selectedValues: []
-    }, this.props.onChange.bind(null, selectedOptions))
+    this.setState({selectedValues: []}, function()  {
+      this.props.onChange(selectedOptions)
+    }.bind(this))
   },
 
-  render: function() {
-    var props = this.props
-    var state = this.state
+  render:function() {
+    var $__0=   this,props=$__0.props,state=$__0.state
     return React.createElement("div", {className: props.className}, 
       React.createElement("input", {
          type: "text", 
          className: props.classNames.filter, 
          placeholder: props.placeholder, 
          value: state.filter, 
-         onChange: this.onFilterChange, 
-         onKeyPress: this.onFilterKeyPress, 
+         onChange: this._onFilterChange, 
+         onKeyPress: this._onFilterKeyPress, 
          disabled: props.disabled}
       ), 
       React.createElement("select", {multiple: true, 
+         ref: "select", 
          className: props.classNames.select, 
          size: props.size, 
          value: state.selectedValues, 
-         onChange: this.onSelectChange, 
+         onChange: this._updateSelectedValues, 
          disabled: props.disabled}, 
-        this.state.filteredOptions.map(function(option) {
+        this.state.filteredOptions.map(function(option)  {
           return React.createElement("option", {key: option[props.valueProp], value: option[props.valueProp]}, option[props.textProp])
         })
       ), 
       React.createElement("button", {type: "button", 
          className: props.classNames.button, 
          disabled: state.selectedValues.length === 0, 
-         onClick: this.selectOptions}, 
+         onClick: this._onButtonClick}, 
         this.props.buttonText
       )
     )
