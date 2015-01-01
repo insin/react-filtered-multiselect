@@ -33,6 +33,8 @@ To deselect items, remove them from the list passed back via the `onChange`
 callback and re-render the `FilteredMultiSelect` with the new list passed as its
 `selectedOptions` prop.
 
+Double-clicking will add the selected option to the selection.
+
 ### Install
 
 **Node**
