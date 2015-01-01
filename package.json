@@ -2,40 +2,49 @@
   "name": "react-filtered-multiselect",
   "description": "Filtered multi-select React component",
   "version": "0.3.0",
+  "main": "./lib/index.js",
+  "homepage": "https://github.com/insin/react-filtered-multiselect",
+  "standalone": "FilteredMultiSelect",
+  "license": "MIT",
   "author": "Jonny Buchanan <jonathan.buchanan@gmail.com> (https://github.com/insin)",
+  "dependencies": {
+  },
+  "peerDependencies": {
+    "react": ">=0.12.0"
+  },
+  "devDependencies": {
+    "browserify": "^7.1.0",
+    "browserify-shim": "^3.8.1",
+    "del": "^1.1.1",
+    "gulp": "^3.8.10",
+    "gulp-header": "^1.2.2",
+    "gulp-jshint": "^1.9.0",
+    "gulp-plumber": "^0.6.6",
+    "gulp-react": "^2.0.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-streamify": "0.0.5",
+    "gulp-uglify": "^1.0.2",
+    "gulp-util": "^3.0.1",
+    "jshint-stylish": "^1.0.0",
+    "vinyl-source-stream": "^1.0.0"
+  },
+  "scripts": {
+    "debug": "gulp --debug",
+    "dist": "gulp bundle-js --production",
+    "watch": "gulp"
+  },
+  "browserify-shim": {
+    "react": "global:React"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/insin/react-filtered-multiselect.git"
+  },
   "keywords": [
     "react",
     "react-component",
     "filtered",
     "multiselect",
     "select-multiple"
-  ],
-  "main": "./index.js",
-  "repository": {
-    "type": "git",
-    "url": "http://github.com/insin/react-filtered-multiselect.git"
-  },
-  "dependencies": {
-  },
-  "devDependencies": {
-    "beepbeep": "^1.2.0",
-    "browserify": "^6.3.2",
-    "browserify-shim": "^3.8.0",
-    "gulp": "^3.8.10",
-    "gulp-header": "^1.2.2",
-    "gulp-jshint": "^1.9.0",
-    "gulp-react": "^2.0.0",
-    "gulp-rename": "^1.2.0",
-    "gulp-streamify": "0.0.5",
-    "gulp-uglify": "^1.0.1",
-    "jshint-stylish": "^1.0.0",
-    "vinyl-source-stream": "^1.0.0"
-  },
-  "peerDependencies": {
-    "react": ">=0.12.0"
-  },
-  "scripts": {},
-  "browserify-shim": {
-    "react": "global:React"
-  }
+  ]
 }

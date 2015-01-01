@@ -1,73 +1,74 @@
-var beep = require('beepbeep')
 var browserify = require('browserify')
+var del = require('del')
 var gulp = require('gulp')
 var source = require('vinyl-source-stream')
 
 var header = require('gulp-header')
 var jshint = require('gulp-jshint')
-var react = require('gulp-react')
 var rename = require('gulp-rename')
+var plumber = require('gulp-plumber')
+var react = require('gulp-react')
 var streamify = require('gulp-streamify')
 var uglify = require('gulp-uglify')
+var gutil = require('gulp-util')
 
 var pkg = require('./package.json')
-var srcHeader = '/**\n\
- * <%= pkg.name %> <%= pkg.version %> - https://github.com/insin/<%= pkg.name %>\n\
- * MIT Licensed\n\
+var devBuild = gutil.env.production ? '' : ' (dev build at ' + (new Date()).toUTCString() + ')'
+var distHeader = '/*!\n\
+ * <%= pkg.name %> <%= pkg.version %><%= devBuild %> - <%= pkg.homepage %>\n\
+ * <%= pkg.license %> Licensed\n\
  */\n'
 
-gulp.task('transpile-jsx', function() {
-  return gulp.src('./index.jsx')
-    .pipe(react({
-      harmony: true
-    }))
-    .pipe(gulp.dest('./'))
+var jsSrcPaths = './src/**/*.js*'
+var jsLibPaths = './lib/**/*.js'
+
+gulp.task('clean-dist', function(cb) {
+  del('./dist/*.js', cb)
 })
 
-gulp.task('lint', ['transpile-jsx'], function() {
-  return gulp.src('./build/*.js')
+gulp.task('clean-lib', function(cb) {
+  del(jsLibPaths, cb)
+})
+
+gulp.task('transpile-js', ['clean-lib'], function() {
+  return gulp.src(jsSrcPaths)
+    .pipe(plumber())
+    .pipe(react({harmony: true}))
+    .pipe(gulp.dest('./lib'))
+})
+
+gulp.task('lint-js', ['transpile-js'], function() {
+  return gulp.src(jsLibPaths)
     .pipe(jshint('./.jshintrc'))
     .pipe(jshint.reporter('jshint-stylish'))
 })
 
-var broken = false
-var needsFixed = false
-
-gulp.task('browserify', ['lint'], function() {
-  var b = browserify('./index.js', {
-    detectGlobals: false
-  , standalone: 'FilteredMultiSelect'
+gulp.task('bundle-js', ['clean-dist', 'lint-js'], function() {
+  var b = browserify(pkg.main, {
+    debug: !!gutil.env.debug
+  , standalone: pkg.standalone
+  , detectGlobals: false
   })
   b.transform('browserify-shim')
 
-  return b.bundle()
-    .on('error', function(err) {
-      gutil.log(err.message)
-      beep(2, 0)
-      broken = true
-      this.emit('end')
-    })
-    .on('end', function() {
-      if (broken) {
-        needsFixed = true
-      }
-      else if (needsFixed) {
-        beep()
-        needsFixed = false
-      }
-      broken = false
-    })
-    .pipe(source('react-filtered-multiselect.js'))
-    .pipe(streamify(header(srcHeader, {pkg: pkg})))
+  var stream = b.bundle()
+    .pipe(source(pkg.name + '.js'))
+    .pipe(streamify(header(distHeader, {pkg: pkg, devBuild: devBuild})))
     .pipe(gulp.dest('./dist'))
-    .pipe(rename('react-filtered-multiselect.min.js'))
-    .pipe(streamify(uglify()))
-    .pipe(streamify(header(srcHeader, {pkg: pkg})))
-    .pipe(gulp.dest('./dist'))
+
+  if (gutil.env.production) {
+    stream = stream
+      .pipe(rename(pkg.name + '.min.js'))
+      .pipe(streamify(uglify()))
+      .pipe(streamify(header(distHeader, {pkg: pkg, devBuild: devBuild})))
+      .pipe(gulp.dest('./dist'))
+  }
+
+  return stream
 })
 
 gulp.task('watch', function() {
-  gulp.watch('./index.jsx', ['browserify'])
+  gulp.watch(jsSrcPaths, ['bundle-js'])
 })
 
-gulp.task('default', ['browserify', 'watch'])
+gulp.task('default', ['bundle-js', 'watch'])

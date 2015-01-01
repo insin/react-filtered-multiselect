@@ -1,9 +1,9 @@
 demo
 dist
 node_modules
+src
 .gitignore
 .jshintrc
 .npmignore
 bootstrap-example.png
 gulpfile.js
-index.jsx
