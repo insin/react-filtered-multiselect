@@ -155,7 +155,11 @@ var FilteredMultiSelect = React.createClass({
     }
   },
 
-  _onButtonClick(e) {
+  /**
+   * Adds backing objects for the currently selected options to the selection
+   * and calls back with the new list.
+   */
+  _addSelectedToSelection(e) {
     var selectedOptions =
       this.props.selectedOptions.concat(getItemsByProp(this.state.filteredOptions,
                                                        this.props.valueProp,
@@ -183,6 +187,7 @@ var FilteredMultiSelect = React.createClass({
          size={props.size}
          value={state.selectedValues}
          onChange={this._updateSelectedValues}
+         onDoubleClick={this._addSelectedToSelection}
          disabled={props.disabled}>
         {this.state.filteredOptions.map((option) => {
           return <option key={option[props.valueProp]} value={option[props.valueProp]}>{option[props.textProp]}</option>
@@ -191,7 +196,7 @@ var FilteredMultiSelect = React.createClass({
       <button type="button"
          className={props.classNames.button}
          disabled={state.selectedValues.length === 0}
-         onClick={this._onButtonClick}>
+         onClick={this._addSelectedToSelection}>
         {this.props.buttonText}
       </button>
     </div>

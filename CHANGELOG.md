@@ -1,3 +1,7 @@
+## 0.3.0 - 2015-01-01
+
+Added: double-clicking now adds the selected option to the selection.
+
 ## 0.2.0 - 2014-12-06
 
 **Breaking:** If you want selected options to no longer appear in the select,
