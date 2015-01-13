@@ -1,3 +1,11 @@
+## 0.3.1 - 2015-01-13
+
+Added: new `buttonActive` property for the `classNames` prop - this will be
+used when one or more options are selected, otherwise `button` will be used.
+
+Changed: `classNames` prop no longer has to provide all properties - defaults
+will be used where not provided.
+
 ## 0.3.0 - 2015-01-01
 
 Added: double-clicking now adds the selected option to the selection.

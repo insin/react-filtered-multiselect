@@ -30,6 +30,13 @@ function getItemsByProp(arr, prop, values) {
   return items
 }
 
+var DEFAULT_CLASS_NAMES = {
+  button: 'FilteredMultiSelect__button'
+, buttonActive: 'FilteredMultiSelect__button--active'
+, filter: 'FilteredMultiSelect__filter'
+, select: 'FilteredMultiSelect__select'
+}
+
 var FilteredMultiSelect = React.createClass({
   propTypes: {
     buttonText: React.PropTypes.string
@@ -50,11 +57,7 @@ var FilteredMultiSelect = React.createClass({
     return {
       buttonText: 'Select'
     , className: 'FilteredMultiSelect'
-    , classNames: {
-        button: 'FilteredMultiSelect__button'
-      , filter: 'FilteredMultiSelect__filter'
-      , select: 'FilteredMultiSelect__select'
-      }
+    , classNames: {}
     , defaultFilter: ''
     , disabled: false
     , placeholder: 'type to filter'
@@ -91,6 +94,19 @@ var FilteredMultiSelect = React.createClass({
                                              nextProps.options)
       }, this._updateSelectedValues)
     }
+  },
+
+  _getClassName(name) {
+    if (arguments.length == 1) {
+      return this.props.classNames[name] || DEFAULT_CLASS_NAMES[name]
+    }
+
+    for (var i = 0, l = arguments.length; i < l ; i++) {
+      if (arguments[i] in this.props.classNames) {
+        return this.props.classNames[arguments[i]]
+      }
+    }
+    return DEFAULT_CLASS_NAMES[name]
   },
 
   _filterOptions(filter, selectedOptions, options) {
@@ -171,10 +187,11 @@ var FilteredMultiSelect = React.createClass({
 
   render() {
     var {props, state} = this
+    var hasSelectedOptions = state.selectedValues.length > 0
     return <div className={props.className}>
       <input
          type="text"
-         className={props.classNames.filter}
+         className={this._getClassName('filter')}
          placeholder={props.placeholder}
          value={state.filter}
          onChange={this._onFilterChange}
@@ -183,7 +200,7 @@ var FilteredMultiSelect = React.createClass({
       />
       <select multiple
          ref="select"
-         className={props.classNames.select}
+         className={this._getClassName('select')}
          size={props.size}
          value={state.selectedValues}
          onChange={this._updateSelectedValues}
@@ -194,8 +211,8 @@ var FilteredMultiSelect = React.createClass({
         })}
       </select>
       <button type="button"
-         className={props.classNames.button}
-         disabled={state.selectedValues.length === 0}
+         className={hasSelectedOptions ? this._getClassName('buttonActive', 'button') : this._getClassName('button')}
+         disabled={!hasSelectedOptions}
          onClick={this._addSelectedToSelection}>
         {this.props.buttonText}
       </button>

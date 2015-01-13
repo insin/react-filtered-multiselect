@@ -1,5 +1,5 @@
-/**
- * react-filtered-multiselect 0.3.0 - https://github.com/insin/react-filtered-multiselect
+/*!
+ * react-filtered-multiselect 0.3.1 - https://github.com/insin/react-filtered-multiselect
  * MIT Licensed
  */
 !function(e){if("object"==typeof exports&&"undefined"!=typeof module)module.exports=e();else if("function"==typeof define&&define.amd)define([],e);else{var f;"undefined"!=typeof window?f=window:"undefined"!=typeof global?f=global:"undefined"!=typeof self&&(f=self),f.FilteredMultiSelect=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
@@ -35,6 +35,13 @@ function getItemsByProp(arr, prop, values) {
   return items
 }
 
+var DEFAULT_CLASS_NAMES = {
+  button: 'FilteredMultiSelect__button'
+, buttonActive: 'FilteredMultiSelect__button--active'
+, filter: 'FilteredMultiSelect__filter'
+, select: 'FilteredMultiSelect__select'
+}
+
 var FilteredMultiSelect = React.createClass({displayName: 'FilteredMultiSelect',
   propTypes: {
     buttonText: React.PropTypes.string
@@ -55,11 +62,7 @@ var FilteredMultiSelect = React.createClass({displayName: 'FilteredMultiSelect',
     return {
       buttonText: 'Select'
     , className: 'FilteredMultiSelect'
-    , classNames: {
-        button: 'FilteredMultiSelect__button'
-      , filter: 'FilteredMultiSelect__filter'
-      , select: 'FilteredMultiSelect__select'
-      }
+    , classNames: {}
     , defaultFilter: ''
     , disabled: false
     , placeholder: 'type to filter'
@@ -96,6 +99,19 @@ var FilteredMultiSelect = React.createClass({displayName: 'FilteredMultiSelect',
                                              nextProps.options)
       }, this._updateSelectedValues)
     }
+  },
+
+  _getClassName:function(name) {
+    if (arguments.length == 1) {
+      return this.props.classNames[name] || DEFAULT_CLASS_NAMES[name]
+    }
+
+    for (var i = 0, l = arguments.length; i < l ; i++) {
+      if (arguments[i] in this.props.classNames) {
+        return this.props.classNames[arguments[i]]
+      }
+    }
+    return DEFAULT_CLASS_NAMES[name]
   },
 
   _filterOptions:function(filter, selectedOptions, options) {
@@ -176,10 +192,11 @@ var FilteredMultiSelect = React.createClass({displayName: 'FilteredMultiSelect',
 
   render:function() {
     var $__0=   this,props=$__0.props,state=$__0.state
+    var hasSelectedOptions = state.selectedValues.length > 0
     return React.createElement("div", {className: props.className}, 
       React.createElement("input", {
          type: "text", 
-         className: props.classNames.filter, 
+         className: this._getClassName('filter'), 
          placeholder: props.placeholder, 
          value: state.filter, 
          onChange: this._onFilterChange, 
@@ -188,7 +205,7 @@ var FilteredMultiSelect = React.createClass({displayName: 'FilteredMultiSelect',
       ), 
       React.createElement("select", {multiple: true, 
          ref: "select", 
-         className: props.classNames.select, 
+         className: this._getClassName('select'), 
          size: props.size, 
          value: state.selectedValues, 
          onChange: this._updateSelectedValues, 
@@ -199,8 +216,8 @@ var FilteredMultiSelect = React.createClass({displayName: 'FilteredMultiSelect',
         })
       ), 
       React.createElement("button", {type: "button", 
-         className: props.classNames.button, 
-         disabled: state.selectedValues.length === 0, 
+         className: hasSelectedOptions ? this._getClassName('buttonActive', 'button') : this._getClassName('button'), 
+         disabled: !hasSelectedOptions, 
          onClick: this._addSelectedToSelection}, 
         this.props.buttonText
       )

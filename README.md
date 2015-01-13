@@ -95,7 +95,9 @@ objects each time the selection is added to.
 
 `className` - class name for the component's `<div>` container.
 
-`classNames` - class names for each of the component's child elements.
+`classNames` - class names for each of the component's child elements. See the
+default props below for properties. Defaults will be used for any properties not
+specified via this prop.
 
 `defaultFilter` - default filter text to be applied to the `<select>`
 
@@ -122,6 +124,8 @@ the `value` for its `<option>`.
   className: 'FilteredMultiSelect',
   classNames: {
     button: 'FilteredMultiSelect__button',
+    // Used when at least one <option> is selected
+    buttonActive: 'FilteredMultiSelect__button--active',
     filter: 'FilteredMultiSelect__filter',
     select: 'FilteredMultiSelect__select'
   }

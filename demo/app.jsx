@@ -257,6 +257,7 @@ var bootstrapClasses = {
   filter: 'form-control'
 , select: 'form-control'
 , button: 'btn btn btn-block btn-default'
+, buttonActive: 'btn btn btn-block btn-primary'
 }
 
 var BasicSelection = React.createClass({
@@ -352,7 +353,12 @@ var AddRemoveSelection = React.createClass({
       <div className="col-md-5">
         <FilteredMultiSelect
           buttonText="Remove"
-          classNames={bootstrapClasses}
+          classNames={{
+            filter: 'form-control'
+          , select: 'form-control'
+          , button: 'btn btn btn-block btn-default'
+          , buttonActive: 'btn btn btn-block btn-danger'
+          }}
           onChange={this._onDeselect}
           options={selectedOptions}
           textProp="name"
