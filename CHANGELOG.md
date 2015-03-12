@@ -1,3 +1,8 @@
+## 0.3.2 - 2015-03-11
+
+Re-bundled with latest Browserify (9.x) and React (0.13.x), but still
+compatible with React 0.12.x.
+
 ## 0.3.1 - 2015-01-13
 
 Added: new `buttonActive` property for the `classNames` prop - this will be
