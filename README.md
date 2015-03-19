@@ -157,7 +157,7 @@ var Example = React.createClass({
   },
 
   _onSelectionChange: function(selectedShips) {
-    this.setState({selectedShips: selectedShips)})
+    this.setState({selectedShips: selectedShips})
   },
 
   _onDeselect: function(index) {
