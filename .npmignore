@@ -3,6 +3,7 @@ demo
 .eslintignore
 .eslintrc
 .gitignore
+.travis.yml
 bootstrap-example.png
 webpack.config.js
 webpack.demo.config.js
