@@ -29,7 +29,6 @@ module.exports = {
       }
     }),
     new HtmlWebpackPlugin({
-      title: 'React &lt;FilteredMultiSelect/&gt; Example'
       title: 'React <FilteredMultiSelect/> Example'
     })
   ],
