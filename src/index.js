@@ -1,10 +1,8 @@
-'use strict';
-
-var React = require('react')
+import React, {PropTypes} from 'react'
 
 function makeLookup(arr, prop) {
   var lkup = {}
-  for (var i = 0, l = arr.length; i < l ; i++) {
+  for (var i = 0, l = arr.length; i < l; i++) {
     if (prop) {
       lkup[arr[i][prop]] = true
     }
@@ -30,41 +28,44 @@ function getItemsByProp(arr, prop, values) {
   return items
 }
 
-var DEFAULT_CLASS_NAMES = {
-  button: 'FilteredMultiSelect__button'
-, buttonActive: 'FilteredMultiSelect__button--active'
-, filter: 'FilteredMultiSelect__filter'
-, select: 'FilteredMultiSelect__select'
+const DEFAULT_CLASS_NAMES = {
+  button: 'FilteredMultiSelect__button',
+  buttonActive: 'FilteredMultiSelect__button--active',
+  filter: 'FilteredMultiSelect__filter',
+  select: 'FilteredMultiSelect__select'
 }
 
-var FilteredMultiSelect = React.createClass({
+export default React.createClass({
+  displayName: 'FilteredMultiSelect',
+
   propTypes: {
-    buttonText: React.PropTypes.string
-  , className: React.PropTypes.string
-  , classNames: React.PropTypes.object
-  , defaultFilter: React.PropTypes.string
-  , disabled: React.PropTypes.bool
-  , onChange: React.PropTypes.func.isRequired
-  , options: React.PropTypes.array.isRequired
-  , placeholder: React.PropTypes.string
-  , selectedOptions: React.PropTypes.array
-  , size: React.PropTypes.number
-  , textProp: React.PropTypes.string
-  , valueProp: React.PropTypes.string
+    onChange: PropTypes.func.isRequired,
+    options: PropTypes.array.isRequired,
+
+    buttonText: PropTypes.string,
+    className: PropTypes.string,
+    classNames: PropTypes.object,
+    defaultFilter: PropTypes.string,
+    disabled: PropTypes.bool,
+    placeholder: PropTypes.string,
+    selectedOptions: PropTypes.array,
+    size: PropTypes.number,
+    textProp: PropTypes.string,
+    valueProp: PropTypes.string
   },
 
   getDefaultProps() {
     return {
-      buttonText: 'Select'
-    , className: 'FilteredMultiSelect'
-    , classNames: {}
-    , defaultFilter: ''
-    , disabled: false
-    , placeholder: 'type to filter'
-    , size: 6
-    , selectedOptions: []
-    , textProp: 'text'
-    , valueProp: 'value'
+      buttonText: 'Select',
+      className: 'FilteredMultiSelect',
+      classNames: {},
+      defaultFilter: '',
+      disabled: false,
+      placeholder: 'type to filter',
+      size: 6,
+      selectedOptions: [],
+      textProp: 'text',
+      valueProp: 'value'
     }
   },
 
@@ -72,11 +73,11 @@ var FilteredMultiSelect = React.createClass({
     var {defaultFilter, selectedOptions} = this.props
     return {
       // Filter text
-      filter: defaultFilter
+      filter: defaultFilter,
       // Options which haven't been selected and match the filter text
-    , filteredOptions: this._filterOptions(defaultFilter, selectedOptions)
+      filteredOptions: this._filterOptions(defaultFilter, selectedOptions),
       // Values of <options> currently selected in the <select>
-    , selectedValues: []
+      selectedValues: []
     }
   },
 
@@ -86,8 +87,8 @@ var FilteredMultiSelect = React.createClass({
     // one of the previously selected options may have been removed.
     if (nextProps.options !== this.props.options ||
         nextProps.selectedOptions !== this.props.selectedOptions ||
-        nextProps.options.length != this.props.options.length ||
-        nextProps.selectedOptions.length != this.props.selectedOptions.length) {
+        nextProps.options.length !== this.props.options.length ||
+        nextProps.selectedOptions.length !== this.props.selectedOptions.length) {
       this.setState({
         filteredOptions: this._filterOptions(this.state.filter,
                                              nextProps.selectedOptions,
@@ -97,11 +98,11 @@ var FilteredMultiSelect = React.createClass({
   },
 
   _getClassName(name) {
-    if (arguments.length == 1) {
+    if (arguments.length === 1) {
       return this.props.classNames[name] || DEFAULT_CLASS_NAMES[name]
     }
 
-    for (var i = 0, l = arguments.length; i < l ; i++) {
+    for (var i = 0, l = arguments.length; i < l; i++) {
       if (arguments[i] in this.props.classNames) {
         return this.props.classNames[arguments[i]]
       }
@@ -125,9 +126,9 @@ var FilteredMultiSelect = React.createClass({
     var selectedValueLookup = makeLookup(selectedOptions, valueProp)
     var filteredOptions = []
 
-    for (var i = 0, l = options.length; i < l ; i++) {
+    for (var i = 0, l = options.length; i < l; i++) {
       if (!selectedValueLookup[options[i][valueProp]] &&
-          (!filter || options[i][textProp].toUpperCase().indexOf(filter) != -1)) {
+          (!filter || options[i][textProp].toUpperCase().indexOf(filter) !== -1)) {
         filteredOptions.push(options[i])
       }
     }
@@ -138,15 +139,15 @@ var FilteredMultiSelect = React.createClass({
   _onFilterChange(e) {
     var filter = e.target.value
     this.setState({
-      filter
-    , filteredOptions: this._filterOptions(filter)
+      filter,
+      filteredOptions: this._filterOptions(filter)
     }, this._updateSelectedValues)
   },
 
   _onFilterKeyPress(e) {
-    if (e.key == 'Enter') {
+    if (e.key === 'Enter') {
       e.preventDefault()
-      if (this.state.filteredOptions.length == 1) {
+      if (this.state.filteredOptions.length === 1) {
         var selectedOption = this.state.filteredOptions[0]
         var selectedOptions = this.props.selectedOptions.concat([selectedOption])
         this.setState({filter: '', selectedValues: []}, () => {
@@ -157,7 +158,7 @@ var FilteredMultiSelect = React.createClass({
   },
 
   _updateSelectedValues(e) {
-    var el = e ? e.target : this.refs.select.getDOMNode()
+    var el = e ? e.target : this.refs.select
     var selectedValues = []
     for (var i = 0, l = el.options.length; i < l; i++) {
       if (el.options[i].selected) {
@@ -166,7 +167,7 @@ var FilteredMultiSelect = React.createClass({
     }
     // Always update if we were handling an event, otherwise only update if
     // selectedValues has actually changed.
-    if (e || String(this.state.selectedValues) != String(selectedValues)) {
+    if (e || String(this.state.selectedValues) !== String(selectedValues)) {
       this.setState({selectedValues})
     }
   },
@@ -219,5 +220,3 @@ var FilteredMultiSelect = React.createClass({
     </div>
   }
 })
-
-module.exports = FilteredMultiSelect

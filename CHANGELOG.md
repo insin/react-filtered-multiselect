@@ -1,3 +1,7 @@
+## 0.4.0 -  2015-10-28
+
+**Breaking:** Now requires React 0.14.
+
 ## 0.3.2 - 2015-03-11
 
 Re-bundled with latest Browserify (9.x) and React (0.13.x), but still

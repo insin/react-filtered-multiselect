@@ -1,8 +1,9 @@
 demo
-dist
-src
+.babelrc
+.eslintignore
+.eslintrc
 .gitignore
-.jshintrc
-.npmignore
 bootstrap-example.png
-gulpfile.js
+webpack.config.js
+webpack.demo.config.js
+webpack.prod.config.js
