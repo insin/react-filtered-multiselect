@@ -1,3 +1,7 @@
+## 0.4.1-  2015-11-08
+
+Removed `dist/` directory from GitHub in favour of [npmcdn](https://npmcdn.com/).
+
 ## 0.4.0 -  2015-10-28
 
 **Breaking:** Now requires React 0.14.
