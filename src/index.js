@@ -97,17 +97,14 @@ export default React.createClass({
     }
   },
 
-  _getClassName(name) {
-    if (arguments.length === 1) {
-      return this.props.classNames[name] || DEFAULT_CLASS_NAMES[name]
-    }
-
-    for (var i = 0, l = arguments.length; i < l; i++) {
-      if (arguments[i] in this.props.classNames) {
-        return this.props.classNames[arguments[i]]
+  _getClassName(name, ...modifiers) {
+    let classNames = [this.props.classNames[name] || DEFAULT_CLASS_NAMES[name]]
+    for (let i = 0, l = modifiers.length; i < l; i++) {
+      if (modifiers[i]) {
+        classNames.push(this.props.classNames[modifiers[i]] || DEFAULT_CLASS_NAMES[modifiers[i]])
       }
     }
-    return DEFAULT_CLASS_NAMES[name]
+    return classNames.join(' ')
   },
 
   _filterOptions(filter, selectedOptions, options) {
@@ -213,7 +210,7 @@ export default React.createClass({
         })}
       </select>
       <button type="button"
-         className={hasSelectedOptions ? this._getClassName('buttonActive', 'button') : this._getClassName('button')}
+         className={this._getClassName('button', hasSelectedOptions && 'buttonActive')}
          disabled={!hasSelectedOptions}
          onClick={this._addSelectedToSelection}>
         {this.props.buttonText}
