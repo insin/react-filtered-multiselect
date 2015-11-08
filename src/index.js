@@ -187,28 +187,29 @@ export default React.createClass({
   },
 
   render() {
-    var {props, state} = this
-    var hasSelectedOptions = state.selectedValues.length > 0
-    return <div className={props.className}>
+    let {filter, filteredOptions, selectedValues} = this.state
+    let {className, disabled, placeholder, size, textProp, valueProp} = this.props
+    let hasSelectedOptions = selectedValues.length > 0
+    return <div className={className}>
       <input
          type="text"
          className={this._getClassName('filter')}
-         placeholder={props.placeholder}
-         value={state.filter}
+         placeholder={placeholder}
+         value={filter}
          onChange={this._onFilterChange}
          onKeyPress={this._onFilterKeyPress}
-         disabled={props.disabled}
+         disabled={disabled}
       />
       <select multiple
          ref="select"
          className={this._getClassName('select')}
-         size={props.size}
-         value={state.selectedValues}
+         size={size}
+         value={selectedValues}
          onChange={this._updateSelectedValues}
          onDoubleClick={this._addSelectedToSelection}
-         disabled={props.disabled}>
-        {this.state.filteredOptions.map((option) => {
-          return <option key={option[props.valueProp]} value={option[props.valueProp]}>{option[props.textProp]}</option>
+         disabled={disabled}>
+        {filteredOptions.map((option) => {
+          return <option key={option[valueProp]} value={option[valueProp]}>{option[textProp]}</option>
         })}
       </select>
       <button type="button"
