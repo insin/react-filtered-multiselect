@@ -21,6 +21,11 @@
     "lint:fix": "eslint src --fix",
     "test": "npm run lint"
   },
+  "files": [
+    "dist",
+    "lib",
+    "src"
+  ],
   "dependencies": {},
   "peerDependencies": {
     "react": ">=0.14.0"
