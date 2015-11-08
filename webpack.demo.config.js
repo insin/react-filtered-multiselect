@@ -6,11 +6,11 @@ var webpack = require('webpack')
 var ExtractTextPlugin = require('extract-text-webpack-plugin')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
 
+var pkg = require('./package.json')
+
 module.exports = {
   devtool: 'source-map',
-  entry: {
-    app: path.resolve(__dirname, 'demo/src/app.js')
-  },
+  entry: path.resolve(__dirname, 'demo/src/app.js'),
   output: {
     filename: 'app.js',
     path: path.resolve(__dirname, 'demo/dist')
@@ -29,14 +29,15 @@ module.exports = {
       }
     }),
     new HtmlWebpackPlugin({
-      title: 'React <FilteredMultiSelect/> Example'
+      title: pkg.name + ' ' + pkg.version + ' Demo'
     })
   ],
   module: {
     loaders: [
       {test: /\.js$/, loader: 'babel', exclude: /node_modules/},
       {test: /\.css$/, loader: ExtractTextPlugin.extract('style', 'css?-minimize')},
-      {test: /\.(gif|jpe?g|png|otf|eot|svg|ttf|woff|woff2).*$/, loader: 'file?name=[name].[ext]'},
+      {test: /\.(gif|jpe?g|png)$/, loader: 'file?name=[name].[ext]'},
+      {test: /\.(otf|eot|svg|ttf|woff|woff2).*$/, loader: 'file?name=[name].[ext]'},
       {test: /\.json$/, loader: 'json'}
     ]
   }
