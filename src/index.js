@@ -1,8 +1,8 @@
 import React, {PropTypes} from 'react'
 
 function makeLookup(arr, prop) {
-  var lkup = {}
-  for (var i = 0, l = arr.length; i < l; i++) {
+  let lkup = {}
+  for (let i = 0, l = arr.length; i < l; i++) {
     if (prop) {
       lkup[arr[i][prop]] = true
     }
@@ -14,10 +14,10 @@ function makeLookup(arr, prop) {
 }
 
 function getItemsByProp(arr, prop, values) {
-  var items = []
-  var found = 0
-  var valuesLookup = makeLookup(values)
-  for (var i = 0, la = arr.length, lv = values.length;
+  let items = []
+  let found = 0
+  let valuesLookup = makeLookup(values)
+  for (let i = 0, la = arr.length, lv = values.length;
        i < la && found < lv;
        i++) {
     if (valuesLookup[arr[i][prop]]) {
@@ -70,7 +70,7 @@ export default React.createClass({
   },
 
   getInitialState() {
-    var {defaultFilter, selectedOptions} = this.props
+    let {defaultFilter, selectedOptions} = this.props
     return {
       // Filter text
       filter: defaultFilter,
@@ -119,11 +119,11 @@ export default React.createClass({
     }
     filter = filter.toUpperCase()
 
-    var {textProp, valueProp} = this.props
-    var selectedValueLookup = makeLookup(selectedOptions, valueProp)
-    var filteredOptions = []
+    let {textProp, valueProp} = this.props
+    let selectedValueLookup = makeLookup(selectedOptions, valueProp)
+    let filteredOptions = []
 
-    for (var i = 0, l = options.length; i < l; i++) {
+    for (let i = 0, l = options.length; i < l; i++) {
       if (!selectedValueLookup[options[i][valueProp]] &&
           (!filter || options[i][textProp].toUpperCase().indexOf(filter) !== -1)) {
         filteredOptions.push(options[i])
@@ -134,7 +134,7 @@ export default React.createClass({
   },
 
   _onFilterChange(e) {
-    var filter = e.target.value
+    let filter = e.target.value
     this.setState({
       filter,
       filteredOptions: this._filterOptions(filter)
@@ -145,8 +145,8 @@ export default React.createClass({
     if (e.key === 'Enter') {
       e.preventDefault()
       if (this.state.filteredOptions.length === 1) {
-        var selectedOption = this.state.filteredOptions[0]
-        var selectedOptions = this.props.selectedOptions.concat([selectedOption])
+        let selectedOption = this.state.filteredOptions[0]
+        let selectedOptions = this.props.selectedOptions.concat([selectedOption])
         this.setState({filter: '', selectedValues: []}, () => {
           this.props.onChange(selectedOptions)
         })
@@ -155,9 +155,9 @@ export default React.createClass({
   },
 
   _updateSelectedValues(e) {
-    var el = e ? e.target : this.refs.select
-    var selectedValues = []
-    for (var i = 0, l = el.options.length; i < l; i++) {
+    let el = e ? e.target : this.refs.select
+    let selectedValues = []
+    for (let i = 0, l = el.options.length; i < l; i++) {
       if (el.options[i].selected) {
         selectedValues.push(el.options[i].value)
       }
@@ -174,7 +174,7 @@ export default React.createClass({
    * and calls back with the new list.
    */
   _addSelectedToSelection(e) {
-    var selectedOptions =
+    let selectedOptions =
       this.props.selectedOptions.concat(getItemsByProp(this.state.filteredOptions,
                                                        this.props.valueProp,
                                                        this.state.selectedValues))
