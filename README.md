@@ -1,5 +1,9 @@
 # react-filtered-multiselect
 
+[![Travis][build-badge]][build]
+[![Codecov][coverage-badge]][coverage]
+[![npm package][npm-badge]][npm]
+
 A `<FilteredMultiSelect/>` React component, for making and adding to selections using a filtered multi-select.
 
 [Live example with Bootstrap styles applied](http://insin.github.io/react-filtered-multiselect/)
@@ -170,3 +174,12 @@ var Example = React.createClass({
 })
 ```
 ## MIT Licensed
+
+[build-badge]: https://img.shields.io/travis/insin/react-filtered-multiselect/master.svg
+[build]: https://travis-ci.org/insin/react-filtered-multiselect
+
+[coverage-badge]: https://img.shields.io/codecov/c/github/insin/react-filtered-multiselect.svg
+[coverage]: https://codecov.io/github/insin/react-filtered-multiselect
+
+[npm-badge]: https://img.shields.io/npm/v/react-filtered-multiselect.svg
+[npm]: https://www.npmjs.org/package/react-filtered-multiselect
