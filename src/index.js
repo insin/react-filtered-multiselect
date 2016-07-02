@@ -106,7 +106,25 @@ export default React.createClass({
     }
     return classNames.join(' ')
   },
+  
+  _parseText(text) {
+      return (text||"").split(/\s+/).map((w) => {
+         return w.toUpperCase();
+      }).filter(function(w) {
+         return w.length > 0;
+      });
+  },
 
+  _doFilter(text, filter) {
+      text = text.toUpperCase();
+      for (var i = 0; i < filter.length; ++i) {
+          if (text.indexOf(filter[i]) === -1) {
+              return false;
+          }
+      }
+
+      return true;
+  },
   _filterOptions(filter, selectedOptions, options) {
     if (typeof filter == 'undefined') {
       filter = this.state.filter
@@ -117,7 +135,7 @@ export default React.createClass({
     if (typeof options == 'undefined') {
       options = this.props.options
     }
-    filter = filter.toUpperCase()
+    filter = this._parseText(filter)
 
     let {textProp, valueProp} = this.props
     let selectedValueLookup = makeLookup(selectedOptions, valueProp)
@@ -125,7 +143,7 @@ export default React.createClass({
 
     for (let i = 0, l = options.length; i < l; i++) {
       if (!selectedValueLookup[options[i][valueProp]] &&
-          (!filter || options[i][textProp].toUpperCase().indexOf(filter) !== -1)) {
+        (filter.length === 0 || this._doFilter(options[i][textProp], filter))) {
         filteredOptions.push(options[i])
       }
     }
