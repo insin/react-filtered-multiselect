@@ -47,6 +47,7 @@ export default React.createClass({
     classNames: PropTypes.object,
     defaultFilter: PropTypes.string,
     disabled: PropTypes.bool,
+    groupProp: PropTypes.string,
     placeholder: PropTypes.string,
     selectedOptions: PropTypes.array,
     size: PropTypes.number,
@@ -61,6 +62,7 @@ export default React.createClass({
       classNames: {},
       defaultFilter: '',
       disabled: false,
+      groupProp: false,
       placeholder: 'type to filter',
       size: 6,
       selectedOptions: [],
@@ -185,8 +187,31 @@ export default React.createClass({
 
   render() {
     let {filter, filteredOptions, selectedValues} = this.state
-    let {className, disabled, placeholder, size, textProp, valueProp} = this.props
+    let {className, disabled, groupProp, placeholder, size, textProp, valueProp} = this.props
     let hasSelectedOptions = selectedValues.length > 0
+    let options = []
+    if (groupProp) {
+      let groups = filteredOptions.reduce((result, option) => {
+        if (!result[option[groupProp]]) {
+          result[option[groupProp]] = []
+        }
+        result[option[groupProp]].push(option)
+        return result
+      }, {})
+      options = Object.keys(groups).map((group) => {
+        return (
+          <optgroup key={group} label={group}>
+            {groups[group].map((option) => {
+              return <option key={option[valueProp]} value={option[valueProp]}>{option[textProp]}</option>
+            })}
+          </optgroup>
+        )
+      })
+    } else {
+      options = filteredOptions.map((option) => {
+        return <option key={option[valueProp]} value={option[valueProp]}>{option[textProp]}</option>
+    })
+    }
     return <div className={className}>
       <input
          type="text"
@@ -205,9 +230,7 @@ export default React.createClass({
          onChange={this._updateSelectedValues}
          onDoubleClick={this._addSelectedToSelection}
          disabled={disabled}>
-        {filteredOptions.map((option) => {
-          return <option key={option[valueProp]} value={option[valueProp]}>{option[textProp]}</option>
-        })}
+        {options}
       </select>
       <button type="button"
          className={this._getClassName('button', hasSelectedOptions && 'buttonActive')}

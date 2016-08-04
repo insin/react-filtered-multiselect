@@ -87,6 +87,9 @@ The component will update its display if its `options` list changes length or is
 
 `disabled` - disables each child element if `true`.
 
+`groupProp` - name of the property in each object in `options` in order to 
+group `<option>` tags with the same group within an `<optgroup>` tag.
+
 `placeholder` - placeholder text to be displayed in the filter `<input>`.
 
 `selectedOptions` - list of option objects which are selected, so should no
