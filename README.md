@@ -48,8 +48,8 @@ import FilteredMultiSelect from 'react-filtered-multiselect'
 
 Browser bundles export a global ``FilteredMultiSelect`` variable and expect to find a global ``React`` variable to work with.
 
-* [react-filtered-multiselect.js](https://npmcdn.com/react-filtered-multiselect/umd/react-filtered-multiselect.js) (development version)
-* [react-filtered-multiselect.min.js](https://npmcdn.com/react-filtered-multiselect/umd/react-filtered-multiselect.min.js) (compressed production version)
+* [react-filtered-multiselect.js](https://unpkg.com/react-filtered-multiselect/umd/react-filtered-multiselect.js) (development version)
+* [react-filtered-multiselect.min.js](https://unpkg.com/react-filtered-multiselect/umd/react-filtered-multiselect.min.js) (compressed production version)
 
 ## API
 
