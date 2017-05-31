@@ -1,36 +1,37 @@
 {
   "name": "react-filtered-multiselect",
-  "description": "Filtered multi-select React component",
   "version": "0.4.2",
+  "description": "Filtered multi-select React component",
   "main": "lib/index.js",
-  "jsnext:main": "src/index.js",
-  "global": "FilteredMultiSelect",
-  "externals": {
-    "react": "React"
-  },
-  "homepage": "https://github.com/insin/react-filtered-multiselect",
-  "license": "MIT",
-  "author": "Jonny Buchanan <jonathan.buchanan@gmail.com>",
-  "scripts": {
-    "test": "nwb lint"
-  },
+  "module": "es/index.js",
   "files": [
+    "es",
     "lib",
-    "src",
     "umd"
   ],
+  "scripts": {
+    "build": "nwb build-react-component",
+    "clean": "nwb clean-module && nwb clean-demo",
+    "lint": "eslint src demo",
+    "start": "nwb serve-react-demo",
+    "test": "npm run lint"
+  },
   "dependencies": {
     "prop-types": "^15.5.7"
   },
   "peerDependencies": {
-    "react": ">=0.14.0"
+    "react": ">=0.14.9"
   },
   "devDependencies": {
-    "bootstrap": "3.3.5",
-    "nwb": "*",
-    "react": "0.14.2",
-    "react-dom": "0.14.2"
+    "bootstrap": "3.3.x",
+    "eslint-config-jonnybuchanan": "5.0.x",
+    "nwb": "0.16.x",
+    "react": "15.x",
+    "react-dom": "15.x"
   },
+  "author": "Jonny Buchanan <jonathan.buchanan@gmail.com>",
+  "homepage": "https://github.com/insin/react-filtered-multiselect",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/insin/react-filtered-multiselect.git"

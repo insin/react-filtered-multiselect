@@ -1,7 +1,6 @@
 # react-filtered-multiselect
 
 [![Travis][build-badge]][build]
-[![Codecov][coverage-badge]][coverage]
 [![npm package][npm-badge]][npm]
 
 A `<FilteredMultiSelect/>` React component, for making and adding to selections using a filtered multi-select.
@@ -34,22 +33,22 @@ Double-clicking will add the selected option to the selection.
 
 **Node**
 
-````
+```
 npm install react-filtered-multiselect
 ```
 
 ```javascript
-var FilteredMultiSelect = require('react-filtered-multiselect')
-// or
 import FilteredMultiSelect from 'react-filtered-multiselect'
+// or
+const FilteredMultiSelect = require('react-filtered-multiselect')
 ```
 
 **Browser**
 
 Browser bundles export a global ``FilteredMultiSelect`` variable and expect to find a global ``React`` variable to work with.
 
-* [react-filtered-multiselect.js](https://npmcdn.com/react-filtered-multiselect/umd/react-filtered-multiselect.js) (development version)
-* [react-filtered-multiselect.min.js](https://npmcdn.com/react-filtered-multiselect/umd/react-filtered-multiselect.min.js) (compressed production version)
+* [react-filtered-multiselect.js](https://unpkg.com/react-filtered-multiselect/umd/react-filtered-multiselect.js) (development version)
+* [react-filtered-multiselect.min.js](https://unpkg.com/react-filtered-multiselect/umd/react-filtered-multiselect.min.js) (compressed production version)
 
 ## API
 
@@ -57,8 +56,8 @@ Browser bundles export a global ``FilteredMultiSelect`` variable and expect to f
 
 Minimal usage:
 
-```javascript
-var options = [
+```js
+let options = [
   {value: 1, text: 'Item One'},
   {value: 2, text: 'Item Two'}
 ]
@@ -71,7 +70,7 @@ var options = [
 
 `options` - list of objects providing `<option>` data for the multi-select. By default, these should have ``text`` and ``value`` properties, but this is configurable via props.
 
-The component will update its display if its `options` list changes length or is replaced with a different list, but it will *not* be able to detect changes which don't affect length or object equality, such as replacement of one option with another. Consider using `react-addons-update` or other immutability helpers if you need to do this.
+The component will update its display if its `options` list changes length or is replaced with a different list, but it will *not* be able to detect changes which don't affect length or object equality, such as replacement of one option with another. Consider using [immutability-helper](https://github.com/kolodny/immutability-helper) or other immutability libraries if you need to do this.
 
 `onChange(selectedOptions)` - callback which will be called with selected option objects each time the selection is added to.
 
@@ -102,7 +101,7 @@ the `value` for its `<option>`.
 
 ### Default props
 
-```javascript
+```js
 {
   buttonText: 'Select',
   className: 'FilteredMultiSelect',
@@ -127,8 +126,8 @@ the `value` for its `<option>`.
 
 Example which implements display of selected items and de-selection.
 
-```javascript
-var CULTURE_SHIPS = [
+```js
+const CULTURE_SHIPS = [
   {id: 1, name: '5*Gelish-Oplule'},
   {id: 2, name: '7*Uagren'},
 // ...
@@ -136,19 +135,18 @@ var CULTURE_SHIPS = [
   {id: 250, name: 'Zoologist'}
 ]
 
-var Example = React.createClass({
-  getInitialState() {
-    return {selectedShips: []}
-  },
+class Example extends React.Component {
+  state = {selectedShips: []}
 
   handleDeselect(index) {
     var selectedShips = this.state.selectedShips.slice()
     selectedShips.splice(index, 1)
     this.setState({selectedShips})
-  },
-  handleSelectionChange(selectedShips) {
+  }
+
+  handleSelectionChange = (selectedShips) => {
     this.setState({selectedShips})
-  },
+  }
 
   render() {
     var {selectedShips} = this.state
@@ -164,22 +162,19 @@ var Example = React.createClass({
       {selectedShips.length > 0 && <ul>
         {selectedShips.map((ship, i) => <li key={ship.id}>
           {`${ship.name} `}
-          <button type="button" onClick={this.handleDeselect.bind(null, i)}>
+          <button type="button" onClick={() => this.handleDeselect(i)}>
             &times;
           </button>
         </li>)}
       </ul>}
     </div>
   }
-})
+}
 ```
 ## MIT Licensed
 
-[build-badge]: https://img.shields.io/travis/insin/react-filtered-multiselect/master.svg
+[build-badge]: https://img.shields.io/travis/insin/react-filtered-multiselect/master.png?style=flat-square
 [build]: https://travis-ci.org/insin/react-filtered-multiselect
 
-[coverage-badge]: https://img.shields.io/codecov/c/github/insin/react-filtered-multiselect.svg
-[coverage]: https://codecov.io/github/insin/react-filtered-multiselect
-
-[npm-badge]: https://img.shields.io/npm/v/react-filtered-multiselect.svg
+[npm-badge]: https://img.shields.io/npm/v/react-filtered-multiselect.png?style=flat-square
 [npm]: https://www.npmjs.org/package/react-filtered-multiselect

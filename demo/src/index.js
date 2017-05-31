@@ -11,28 +11,27 @@ const BOOTSTRAP_CLASSES = {
   filter: 'form-control',
   select: 'form-control',
   button: 'btn btn btn-block btn-default',
-  buttonActive: 'btn btn btn-block btn-primary'
+  buttonActive: 'btn btn btn-block btn-primary',
 }
 
-var BasicSelection = React.createClass({
-  getInitialState() {
-    return {
-      selectedOptions: []
-    }
-  },
+class BasicSelection extends React.Component {
+  state = {
+    selectedOptions: []
+  }
 
-  handleClearSelection() {
-    this.setState({selectedOptions: []})
-  },
   handleDeselect(index) {
     var selectedOptions = this.state.selectedOptions.slice()
     selectedOptions.splice(index, 1)
     this.setState({selectedOptions})
-  },
-  handleSelectionChange(selectedOptions) {
+  }
+
+  handleClearSelection = (e) => {
+    this.setState({selectedOptions: []})
+  }
+  handleSelectionChange = (selectedOptions) => {
     selectedOptions.sort((a, b) => a.id - b.id)
     this.setState({selectedOptions})
-  },
+  }
 
   render() {
     var {selectedOptions} = this.state
@@ -53,7 +52,7 @@ var BasicSelection = React.createClass({
         {selectedOptions.length > 0 && <ol>
           {selectedOptions.map((ship, i) => <li key={ship.id}>
             {`${ship.name} `}
-            <span style={{cursor: 'pointer'}} onClick={this.handleDeselect.bind(null, i)}>
+            <span style={{cursor: 'pointer'}} onClick={() => this.handleDeselect(i)}>
               &times;
             </span>
           </li>)}
@@ -64,26 +63,24 @@ var BasicSelection = React.createClass({
       </div>
     </div>
   }
-})
+}
 
-var AddRemoveSelection = React.createClass({
-  getInitialState() {
-    return {
-      selectedOptions: []
-    }
-  },
+class AddRemoveSelection extends React.Component {
+  state = {
+    selectedOptions: []
+  }
 
-  handleDeselect(deselectedOptions) {
+  handleDeselect = (deselectedOptions) => {
     var selectedOptions = this.state.selectedOptions.slice()
     deselectedOptions.forEach(option => {
       selectedOptions.splice(selectedOptions.indexOf(option), 1)
     })
     this.setState({selectedOptions})
-  },
-  handleSelect(selectedOptions) {
+  }
+  handleSelect = (selectedOptions) => {
     selectedOptions.sort((a, b) => a.id - b.id)
     this.setState({selectedOptions})
-  },
+  }
 
   render() {
     var {selectedOptions} = this.state
@@ -116,9 +113,9 @@ var AddRemoveSelection = React.createClass({
       </div>
     </div>
   }
-})
+}
 
-var App = React.createClass({
+class App extends React.Component {
   render() {
     return <div className="container">
       <div className="row header">
@@ -137,12 +134,6 @@ var App = React.createClass({
       <AddRemoveSelection/>
     </div>
   }
-})
-
-var app = document.querySelector('#app')
-if (!app) {
-  app = document.createElement('div')
-  app.id = 'app'
-  document.body.appendChild(app)
 }
-render(<App/>, app)
+
+render(<App/>, document.querySelector('#demo'))

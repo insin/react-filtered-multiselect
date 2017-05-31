@@ -132,7 +132,11 @@ class FilteredMultiSelect extends React.Component {
     return filteredOptions
   }
 
-  _onFilterChange(e) {
+  _selectRef = (select) => {
+    this._select = select
+  }
+
+  _onFilterChange = (e) => {
     let filter = e.target.value
     this.setState({
       filter,
@@ -140,7 +144,7 @@ class FilteredMultiSelect extends React.Component {
     }, this._updateSelectedValues)
   }
 
-  _onFilterKeyPress(e) {
+  _onFilterKeyPress = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault()
       if (this.state.filteredOptions.length === 1) {
@@ -153,8 +157,8 @@ class FilteredMultiSelect extends React.Component {
     }
   }
 
-  _updateSelectedValues(e) {
-    let el = e ? e.target : this.refs.select
+  _updateSelectedValues = (e) => {
+    let el = e ? e.target : this._select
     let selectedValues = []
     for (let i = 0, l = el.options.length; i < l; i++) {
       if (el.options[i].selected) {
@@ -172,7 +176,7 @@ class FilteredMultiSelect extends React.Component {
    * Adds backing objects for the currently selected options to the selection
    * and calls back with the new list.
    */
-  _addSelectedToSelection(e) {
+  _addSelectedToSelection = (e) => {
     let selectedOptions =
       this.props.selectedOptions.concat(getItemsByProp(this.state.filteredOptions,
                                                        this.props.valueProp,
@@ -188,30 +192,30 @@ class FilteredMultiSelect extends React.Component {
     let hasSelectedOptions = selectedValues.length > 0
     return <div className={className}>
       <input
-         type="text"
-         className={this._getClassName('filter')}
-         placeholder={placeholder}
-         value={filter}
-         onChange={this._onFilterChange}
-         onKeyPress={this._onFilterKeyPress}
-         disabled={disabled}
+        type="text"
+        className={this._getClassName('filter')}
+        placeholder={placeholder}
+        value={filter}
+        onChange={this._onFilterChange}
+        onKeyPress={this._onFilterKeyPress}
+        disabled={disabled}
       />
       <select multiple
-         ref="select"
-         className={this._getClassName('select')}
-         size={size}
-         value={selectedValues}
-         onChange={this._updateSelectedValues}
-         onDoubleClick={this._addSelectedToSelection}
-         disabled={disabled}>
+        ref={this._selectRef}
+        className={this._getClassName('select')}
+        size={size}
+        value={selectedValues}
+        onChange={this._updateSelectedValues}
+        onDoubleClick={this._addSelectedToSelection}
+        disabled={disabled}>
         {filteredOptions.map((option) => {
           return <option key={option[valueProp]} value={option[valueProp]}>{option[textProp]}</option>
         })}
       </select>
       <button type="button"
-         className={this._getClassName('button', hasSelectedOptions && 'buttonActive')}
-         disabled={!hasSelectedOptions}
-         onClick={this._addSelectedToSelection}>
+        className={this._getClassName('button', hasSelectedOptions && 'buttonActive')}
+        disabled={!hasSelectedOptions}
+        onClick={this._addSelectedToSelection}>
         {this.props.buttonText}
       </button>
     </div>
