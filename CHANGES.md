@@ -1,6 +1,8 @@
+# 0.5.0 / 2017-05-31
+
 **Breaking:** Now requires React >= 0.14.9.
 
-Changed: use `React.Component` and the prop-types module to avoid deprecation warnings [[#11](https://github.com/insin/react-filtered-multiselect/issues/11)] [[jarekwg](https://github.com/jarekwg )]
+Changed: use `React.Component` and the prop-types module to avoid deprecation warnings [[#11](https://github.com/insin/react-filtered-multiselect/issues/11)] [[jarekwg](https://github.com/jarekwg)]
 
 Changed: link to [unpkg](https://unpkg.com/) for UMD build distribution.
 
