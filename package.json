@@ -20,6 +20,7 @@
     "umd"
   ],
   "dependencies": {
+    "prop-types": "^15.5.7"
   },
   "peerDependencies": {
     "react": ">=0.14.0"

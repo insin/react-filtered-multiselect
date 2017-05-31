@@ -1,4 +1,5 @@
-import React, {PropTypes} from 'react'
+import PropTypes from 'prop-types'
+import React from 'react'
 
 function makeLookup(arr, prop) {
   let lkup = {}
@@ -35,10 +36,8 @@ const DEFAULT_CLASS_NAMES = {
   select: 'FilteredMultiSelect__select'
 }
 
-export default React.createClass({
-  displayName: 'FilteredMultiSelect',
-
-  propTypes: {
+class FilteredMultiSelect extends React.Component {
+  static propTypes = {
     onChange: PropTypes.func.isRequired,
     options: PropTypes.array.isRequired,
 
@@ -52,26 +51,26 @@ export default React.createClass({
     size: PropTypes.number,
     textProp: PropTypes.string,
     valueProp: PropTypes.string
-  },
+  }
 
-  getDefaultProps() {
-    return {
-      buttonText: 'Select',
-      className: 'FilteredMultiSelect',
-      classNames: {},
-      defaultFilter: '',
-      disabled: false,
-      placeholder: 'type to filter',
-      size: 6,
-      selectedOptions: [],
-      textProp: 'text',
-      valueProp: 'value'
-    }
-  },
+  static defaultProps = {
+    buttonText: 'Select',
+    className: 'FilteredMultiSelect',
+    classNames: {},
+    defaultFilter: '',
+    disabled: false,
+    placeholder: 'type to filter',
+    size: 6,
+    selectedOptions: [],
+    textProp: 'text',
+    valueProp: 'value'
+  }
 
-  getInitialState() {
-    let {defaultFilter, selectedOptions} = this.props
-    return {
+  constructor(props) {
+    super(props)
+
+    let {defaultFilter, selectedOptions} = props
+    this.state = {
       // Filter text
       filter: defaultFilter,
       // Options which haven't been selected and match the filter text
@@ -79,7 +78,7 @@ export default React.createClass({
       // Values of <options> currently selected in the <select>
       selectedValues: []
     }
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
     // Update visibile options in response to options or selectedOptions
@@ -95,7 +94,7 @@ export default React.createClass({
                                              nextProps.options)
       }, this._updateSelectedValues)
     }
-  },
+  }
 
   _getClassName(name, ...modifiers) {
     let classNames = [this.props.classNames[name] || DEFAULT_CLASS_NAMES[name]]
@@ -105,7 +104,7 @@ export default React.createClass({
       }
     }
     return classNames.join(' ')
-  },
+  }
 
   _filterOptions(filter, selectedOptions, options) {
     if (typeof filter == 'undefined') {
@@ -131,7 +130,7 @@ export default React.createClass({
     }
 
     return filteredOptions
-  },
+  }
 
   _onFilterChange(e) {
     let filter = e.target.value
@@ -139,7 +138,7 @@ export default React.createClass({
       filter,
       filteredOptions: this._filterOptions(filter)
     }, this._updateSelectedValues)
-  },
+  }
 
   _onFilterKeyPress(e) {
     if (e.key === 'Enter') {
@@ -152,7 +151,7 @@ export default React.createClass({
         })
       }
     }
-  },
+  }
 
   _updateSelectedValues(e) {
     let el = e ? e.target : this.refs.select
@@ -167,7 +166,7 @@ export default React.createClass({
     if (e || String(this.state.selectedValues) !== String(selectedValues)) {
       this.setState({selectedValues})
     }
-  },
+  }
 
   /**
    * Adds backing objects for the currently selected options to the selection
@@ -181,7 +180,7 @@ export default React.createClass({
     this.setState({selectedValues: []}, () => {
       this.props.onChange(selectedOptions)
     })
-  },
+  }
 
   render() {
     let {filter, filteredOptions, selectedValues} = this.state
@@ -217,4 +216,6 @@ export default React.createClass({
       </button>
     </div>
   }
-})
+}
+
+export default FilteredMultiSelect
