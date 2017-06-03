@@ -81,7 +81,7 @@ class FilteredMultiSelect extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // Update visibile options in response to options or selectedOptions
+    // Update visible options in response to options or selectedOptions
     // changing. Also update selected values after the re-render completes, as
     // one of the previously selected options may have been removed.
     if (nextProps.options !== this.props.options ||
