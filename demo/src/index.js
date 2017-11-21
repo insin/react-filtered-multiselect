@@ -168,7 +168,7 @@ class NoFilter extends React.Component {
 
 class App extends React.Component {
   render() {
-    return <div className="container">
+    return <div className="container mb-5">
       <div className="row header">
         <div className="col-md-12">
           <h1><a href="https://github.com/insin/react-filtered-multiselect">React &lt;FilteredMultiSelect/&gt;</a></h1>
