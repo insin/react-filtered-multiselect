@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+import t from 'prop-types'
 import React from 'react'
 
 function makeLookup(arr, prop) {
@@ -38,19 +38,20 @@ const DEFAULT_CLASS_NAMES = {
 
 class FilteredMultiSelect extends React.Component {
   static propTypes = {
-    onChange: PropTypes.func.isRequired,
-    options: PropTypes.array.isRequired,
+    onChange: t.func.isRequired,
+    options: t.array.isRequired,
 
-    buttonText: PropTypes.string,
-    className: PropTypes.string,
-    classNames: PropTypes.object,
-    defaultFilter: PropTypes.string,
-    disabled: PropTypes.bool,
-    placeholder: PropTypes.string,
-    selectedOptions: PropTypes.array,
-    size: PropTypes.number,
-    textProp: PropTypes.string,
-    valueProp: PropTypes.string
+    buttonText: t.string,
+    className: t.string,
+    classNames: t.object,
+    defaultFilter: t.string,
+    disabled: t.bool,
+    placeholder: t.string,
+    selectedOptions: t.array,
+    showFilter: t.bool,
+    size: t.number,
+    textProp: t.string,
+    valueProp: t.string,
   }
 
   static defaultProps = {
@@ -60,10 +61,11 @@ class FilteredMultiSelect extends React.Component {
     defaultFilter: '',
     disabled: false,
     placeholder: 'type to filter',
-    size: 6,
     selectedOptions: [],
+    showFilter: true,
+    size: 6,
     textProp: 'text',
-    valueProp: 'value'
+    valueProp: 'value',
   }
 
   constructor(props) {
@@ -188,10 +190,10 @@ class FilteredMultiSelect extends React.Component {
 
   render() {
     let {filter, filteredOptions, selectedValues} = this.state
-    let {className, disabled, placeholder, size, textProp, valueProp} = this.props
+    let {className, disabled, placeholder, showFilter, size, textProp, valueProp} = this.props
     let hasSelectedOptions = selectedValues.length > 0
     return <div className={className}>
-      <input
+      {showFilter && <input
         type="text"
         className={this._getClassName('filter')}
         placeholder={placeholder}
@@ -199,7 +201,7 @@ class FilteredMultiSelect extends React.Component {
         onChange={this._onFilterChange}
         onKeyPress={this._onFilterKeyPress}
         disabled={disabled}
-      />
+      />}
       <select multiple
         ref={this._selectRef}
         className={this._getClassName('select')}

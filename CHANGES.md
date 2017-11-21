@@ -1,3 +1,5 @@
+Added a `showFilter` prop to hide the filter input if you just want to use this component for selection [[#15](https://github.com/insin/react-filtered-multiselect/issues/15)]
+
 # 0.5.0 / 2017-05-31
 
 **Breaking:** Now requires React >= 0.14.9.

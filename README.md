@@ -91,6 +91,8 @@ The component will update its display if its `options` list changes length or is
 `selectedOptions` - list of option objects which are selected, so should no
 longer be displayed in the `<select>`.
 
+`showFilter` - pass `false` to disable showing the filter input if you just use this component for selection.
+
 `size` - `size` attribute for the `<select>`
 
 `textProp` - name of the property in each object in `options` which provides
@@ -115,8 +117,9 @@ the `value` for its `<option>`.
   defaultFilter: '',
   disabled: false,
   placeholder: 'type to filter',
-  size: 6,
   selectedOptions: [],
+  showFilter: true,
+  size: 6,
   textProp: 'text',
   valueProp: 'value'
 }
