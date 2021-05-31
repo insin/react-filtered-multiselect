@@ -86,7 +86,6 @@ class FilteredMultiSelect extends React.Component {
     }
   }
 
-
   componentDidUpdate(prevProps, prevState) {
     if (
       prevProps.options !== this.props.options ||
