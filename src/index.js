@@ -1,3 +1,5 @@
+/* eslint-disable react/no-did-update-set-state */
+
 import t from 'prop-types'
 import React from 'react'
 
@@ -6,7 +8,8 @@ function makeLookup(arr, prop) {
   for (let i = 0, l = arr.length; i < l; i++) {
     if (prop) {
       lkup[arr[i][prop]] = true
-    } else {
+    }
+    else {
       lkup[arr[i]] = true
     }
   }
@@ -82,6 +85,7 @@ class FilteredMultiSelect extends React.Component {
       selectedValues: [],
     }
   }
+
 
   componentDidUpdate(prevProps, prevState) {
     if (
